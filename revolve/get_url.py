@@ -9,6 +9,7 @@ import re
 
 s = requests.session()
 
+
 class GetRevolve():
     def __init__(self, url, category='', secondary_category=''):
         self.url = url
@@ -110,7 +111,7 @@ url7 = 'http://www.revolve.com/sweaters-knits/br/a49835/?navsrc=subclothing'
 url8 = 'http://www.revolve.com/intimates/br/dad0f5/?navsrc=subclothing'
 url9 = 'http://www.revolve.com/tops-blouses/br/d01fe8/?navsrc=left'
 url10 = 'http://www.revolve.com/tops-tees/br/1e8535/?navsrc=left'
-url11= 'http://www.revolve.com/tops-tanks/br/d3ad99/?navsrc=left'
+url11 = 'http://www.revolve.com/tops-tanks/br/d3ad99/?navsrc=left'
 url12 = 'http://www.revolve.com/tops-bodysuits/br/68e631/?navsrc=left'
 url13 = 'http://www.revolve.com/shorts/br/9d2482/?navsrc=subclothing'
 url14 = 'http://www.revolve.com/skirts/br/8b6a66/?navsrc=subclothing'
@@ -122,7 +123,7 @@ url19 = 'http://www.revolve.com/bags/br/2df9df/?navsrc=main'
 url20 = 'http://www.revolve.com/jewelry-accessories-belts/br/ea8542/?navsrc=subaccessories'
 url21 = 'http://www.revolve.com/jewelry-accessories-sunglasses-eyewear/br/4c27de/?navsrc=subaccessories'
 url22 = 'http://www.revolve.com/jewelry-accessories-gloves/br/6ddfca/?navsrc=subaccessories'
-url23= 'http://www.revolve.com/jewelry-accessories-hats-hair-accessories/br/dcfd6d/?navsrc=subaccessories'
+url23 = 'http://www.revolve.com/jewelry-accessories-hats-hair-accessories/br/dcfd6d/?navsrc=subaccessories'
 url24 = 'http://www.revolve.com/jewelry-accessories-scarves/br/b95ee6/?navsrc=subaccessories'
 url25 = 'http://www.revolve.com/jewelry-accessories-beauty/br/49fd78/?navsrc=subaccessories'
 url26 = 'http://www.revolve.com/jewelry-accessories-hosiery-socks/br/c5ef6b/?navsrc=subaccessories'
@@ -138,7 +139,7 @@ if __name__ == '__main__':
     g7 = GetRevolve(url7, 'Women_Apparel', 'Sweater')
     g8 = GetRevolve(url8, 'Women_Apparel', 'Lingerie')
     g9 = GetRevolve(url9, 'Women_Apparel', 'Blouses')
-    g10 = GetRevolve(ur10, 'Women_Apparel', 'T-shirts')
+    g10 = GetRevolve(url10, 'Women_Apparel', 'T-shirts')
     g11 = GetRevolve(url11, 'Women_Apparel', 'Tops')
     g12 = GetRevolve(url12, 'Women_Apparel', 'bodysuit')
     g13 = GetRevolve(url13, 'Women_Apparel', 'Shorts')

@@ -71,7 +71,7 @@ def get_url(url_dic):
         html_text = r.text
         # print html_text
         soup = BeautifulSoup(html_text,"html.parser")
-        # print url
+        print url
 
         price = 0.0
         try:
@@ -97,10 +97,45 @@ def get_url(url_dic):
 
         name = soup.find("div",{"class":"product-titles"}).find("h1",{"class":"product-titles__name product-titles__name--long u-margin-b--none u-margin-t--lg"}).text.strip()
         print name
+        material = soup.find("div", {"class": "product-details__content"}) \
+            .find("ul", {"class": "product-details__list u-margin-l--none"}).findAll("li")[0].text.split()
+        # js-tabs__content js-tabs__content-active product-details__description
+        print material
+        # print material
+        count = []
+        for index1, p in enumerate(material):
+            # print index1
+            for index2, q in enumerate(p):
+                if q == '%':
+                    count.append(index1)
+                    # print count
+        if len(count) == 0:
+            if "blend" in material:
+                material = material[0]
+            material == material
+            print material
+        else:
+            material = material[count[0] + 1]
+            material1 = []
+            i = 0
+            for index, p in enumerate(material):
+                i = i + 1
+                material1.append(p)
+                # material= "".join(material1)
+                if "L" in material1:
+                    material1 = material1[0:i - 1]
+                    material = "".join(material1)
+                    print material
+                if "C" in material1:
+                    material1 = material1[0:i - 1]
+                    material = "".join(material1)
+                    # print material
+            print material
+
+        color = get_color(color)
+        material = get_material(material)
 
         down_img_url = download_local(img1, 'go')
-
-
 
         goods = Goods()
         goods.goods_name = name
@@ -135,8 +170,123 @@ def get_url(url_dic):
         session.add(ch)
 
         session.commit()
-        session.close()
+        # session.close()
 
+# add filter
+    filter_color = None
+    if color:
+        filter_color = session.query(Filter).filter(Filter.name == color)\
+                .filter(Filter.fg_id == filter_group_dic.get('color')).first()
+    print filter_color
+
+    filter_material = None
+    if material:
+        filter_material = session.query(Filter).filter(Filter.name == material). \
+            filter(Filter.fg_id == filter_group_dic.get('material')).first()
+    print filter_material
+
+    if filter_color:
+        color_goods_filter = GoodsFilter()
+        color_goods_filter.goods_id = goods.goods_id
+        color_goods_filter.filter_id = filter_color.filter_id
+        color_goods_filter.filter_name = filter_color.name
+        color_goods_filter.fg_id = filter_color.fg_id
+        color_goods_filter.filter_group_name = 'color'
+        session.add(color_goods_filter)
+
+    if filter_material:
+        material_goods_filter = GoodsFilter()
+        material_goods_filter.goods_id = goods.goods_id
+        material_goods_filter.filter_id = filter_material.filter_id
+        material_goods_filter.fg_id = filter_material.fg_id
+        material_goods_filter.filter_name = filter_material.name
+        material_goods_filter.filter_group_name = 'material'
+        session.add(material_goods_filter)
+
+    curr_time = int(time.time())
+    cq_info = session.query(CollectionQueue).filter(CollectionQueue.cq_id == cq_id).first()
+    if cq_info:
+        cq_info.goods_id = goods.goods_id
+        cq_info.is_collected = 1
+        cq_info.plan_time = curr_time
+        cq_info.collected_time = curr_time
+    ch = CollectionHistory()
+    ch.goods_id = goods.goods_id
+    ch.goods_price = price
+    ch.rank = rank
+    ch.collected_time = curr_time
+    session.add(ch)
+
+    session.commit()
+    session.close()
+
+def get_color(color_str):
+    color_list = ['dusty blue', 'gold', 'camel', 'sangria', 'deep taupe', 'sage', 'yellow',
+                  'azalea', 'light yellow', 'rose', 'black', 'matte gold', 'orange', 'flamingo pink',
+                  'brown', 'turquoise', 'aubergine', 'seafoam', 'safari', 'silver', 'stone blue',
+                  'nude', 'miami pink', 'teal', 'antique silver', 'antique gold', 'neon pink',
+                  'peony', 'mauve', 'jade', 'lavender', 'bubble gum', 'violet', 'navy', 'orchid',
+                  'blue', 'light brown', 'purple', 'antic gold', 'light rose', 'daquiri', 'burgundy',
+                  'champagne', 'red', 'pink pearl', 'fuchsia purple', 'matte black', 'b.silver',
+                  'rose gold', 'baby pink', 'bronze', 'gunmetal', 'fiery red', 'coral', 'hot pink',
+                  'aqua', 'oatmeal', 'beige', 'cherry', 'blush', 'copper', 'fuchsia', 'matte silver',
+                  'island mango', 'tigerlily', 'seashell', 'light pink', 'b.gold', 'periwinkle',
+                  'baby blue', 'white', 'coral pink', 'ivory', 'tangerine', 'brick', 'multi',
+                  'peachy cheeks', 'apricot', 'light grey', 'grey', 'crystal', 'light green',
+                  'plum', 'rust', 'taupe', 'neon yellow', 'antic silver', 'berry sorbet',
+                  'sophisticate', 'light blue', 'mint', 'tan', 'cream', 'pink', 'rainbow',
+                  'peach', 'neon orange', 'berry', 'mustard', 'blue print', 'salmon',
+                  'hunter green', 'dark grey', 'tomato', 'natural', 'antic.g', 'pink chiffon',
+                  'clear', 'green', 'dusty pink', 'wine']
+
+    for color in color_list:
+        if color in color_str:
+            return color
+    return ''
+
+
+def get_material(material_str):
+    material_list =['Olefin', 'polyester', 'stainless', 'polyurethane', 'brass', 'gold', 'stainless',
+                     'PVC', 'acrylic', 'semiprecious', 'zincChain', 'sterling',
+                     'SBR','poly',
+                     'TPR',
+                     'TPU',
+                     'acrylic',
+                     'cotton',
+                     'elastane',
+                     'leather',
+                     'linen',
+                     'lyocell',
+                     'metallic',
+                     'modal',
+                     'nylon', 'polypropylene', 'brassapprox', 'gold', 'copper',
+                     'polyesterhand', 'silverchain', 'pvc', 'paper', 'spandex', 'rayon', 'cotton',
+                     'genuine', 'crystal', 'semiprecious', 'stainless', 'other', 'acrylic',
+                     'polyesterlength', 'sterling', 'brassband', 'polyurethane', 'zincband', 'silicone',
+                     'polyestermade', 'glass', 'brass', 'leather', 'zincwrist', 'metal',
+                     'goldfilledchain', 'zincchain', 'suede', 'goldchain', 'nylon','pigskin',
+                     'nylonhand', 'spandex', 'nylonpolyamide', 'regenerated', 'cottonhand', 'acrylicdry',
+                     'polyurethanemade', 'pvc', 'cottonmachine', 'polyesterhand', 'spandexhand', 'rayon',
+                     'cotton', 'olefinmade', 'tprmade', 'modacrylic', 'genuine', 'woolmachine', 'linen',
+                     'viscose', 'spandexdry', 'rayonmachine', 'metallic', 'rubber', 'spandexmachine',
+                     'other', 'polyesterdry', 'olefin', 'cottonmade', 'acrylic', 'novasuede', 'sbr', 'acrylics',
+                     'outsole', 'polyurethane', 'acrylichand', 'polyestermade', 'cottonspot', 'polyethylene',
+                     'spandexelastanehand', 'rayonhand', 'rayonsize', 'rabbit', 'mohair', 'jute', 'polyester',
+                     'wool', 'leather', 'eva', 'viscosehand', 'viscosemachine', 'polyesterspot', 'rubbermade',
+                     'woolhand', 'polyestermachine', 'tpu', 'tpr', 'modal', 'nylon'
+                     'nylonapprox','other',
+                     'polyurethane',
+                     'ramie',
+                     'rayon',
+                     'rubber',
+                     'spandex',
+                     'viscose',
+                     'wool']
+    for material in material_list:
+        if material in material_str:
+            return material
+
+    return ''
 
 if __name__== '__main__':
     get_queue()
