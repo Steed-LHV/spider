@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 from aladin.helpers import toint
 from db_conn import CollectionQueue, CollectionHistory, session, headers, Goods
 import re
-
+import httplib
+httplib._MAXHEADERS = 1000
 s = requests.session()
 
 
