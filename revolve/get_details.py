@@ -130,7 +130,7 @@ def get_url(url_dic):
                     print material
                 if "C" in material1:
                     material1 = material1[0:i - 1]
-                    material = "".join(material1)
+                    material = "".join(material1).lower()
                     # print material
             print material
 
@@ -150,6 +150,7 @@ def get_url(url_dic):
         goods.details_img1 = img1
         goods.details_img2 = img2
         goods.details_img3 = img3
+        goods.img_url = down_img_url
         # goods.details_img4 = img4
         goods.category = url_dic.get('category', '')
         goods.secondary_category = url_dic.get('secondary_category', '')
