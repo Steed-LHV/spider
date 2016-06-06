@@ -3,6 +3,8 @@
 
 import requests
 import time
+import httplib
+httplib._MAXHEADERS = 1000
 import json
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
