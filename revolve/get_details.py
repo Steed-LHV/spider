@@ -82,8 +82,9 @@ def get_url(url_dic):
             # print price
         except (AttributeError):
             pass
-        color = soup.find("span",{"class":"u-font-primary u-uppercase u-margin-l--md selectedColor"}).text
-        # print color
+        color = soup.find("span",{"class":"u-font-primary u-uppercase u-margin-l--md selectedColor"}).text.lower()
+        color = color.lower()
+        print color
 
         img_url = []
         img = soup.find("div",{"id":"js-primary-slideshow__pager"}).findAll("a",{"class":"js-primary-slideshow__pager-thumb slideshow__pager-thumb"})
@@ -102,7 +103,7 @@ def get_url(url_dic):
         material = soup.find("div", {"class": "product-details__content"}) \
             .find("ul", {"class": "product-details__list u-margin-l--none"}).findAll("li")[0].text.split()
         # js-tabs__content js-tabs__content-active product-details__description
-        print material
+        # print material
         # print material
         count = []
         for index1, p in enumerate(material):
@@ -134,8 +135,8 @@ def get_url(url_dic):
                     # print material
             print material
 
-        color = get_color(color)
-        material = get_material(material)
+        color = get_color(color.lower())
+        material = get_material(material.lower())
 
         down_img_url = download_local(img1, 'go')
 

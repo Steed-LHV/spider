@@ -10,10 +10,10 @@ from decimal import Decimal
 import requests, time
 
 # DB_CONNECT_STRING = 'mysql://root:@localhost/Reptile?charset=utf8'
-# DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/go?charset=utf8'
+DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/go?charset=utf8'
 # DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/Reptile?charset=utf8'
 
-DB_CONNECT_STRING = 'mysql://go:go@123@zzkko.cqrxa4hpcscy.us-west-1.rds.amazonaws.com/go?charset=utf8'
+# DB_CONNECT_STRING = 'mysql://go:go@123@zzkko.cqrxa4hpcscy.us-west-1.rds.amazonaws.com/go?charset=utf8'
 
 Base        = declarative_base()
 engine      = create_engine(DB_CONNECT_STRING, echo=False)
@@ -185,9 +185,9 @@ def create_session():
     :return:
     """
     # DB_CONNECT_STRING = 'mysql://root:@localhost/Reptile?charset=utf8'
-    # DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/go?charset=utf8'
+    DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/go?charset=utf8'
     # DB_CONNECT_STRING = 'mysql://root:@10.10.0.219/Reptile?charset=utf8'
-    DB_CONNECT_STRING = 'mysql://go:go@123@zzkko.cqrxa4hpcscy.us-west-1.rds.amazonaws.com/go?charset=utf8'
+    # DB_CONNECT_STRING = 'mysql://go:go@123@zzkko.cqrxa4hpcscy.us-west-1.rds.amazonaws.com/go?charset=utf8'
 
 
     engine      = create_engine(DB_CONNECT_STRING, echo=False)
