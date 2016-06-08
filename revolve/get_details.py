@@ -20,6 +20,8 @@ from aladin.utils.date import format_timestamp
 from decimal import Decimal
 from down_img import download_local
 import sys
+from multiprocessing import Pool
+import re
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -34,6 +36,14 @@ filter_group_dic = {'color': 4,
 s = requests.session()
 queue_info = 0
 url_list = []
+
+
+def do_poll():
+    get_queue()
+    pool = Pool(8)
+    pool.map(get_url, url_list)
+    pool.close()
+    pool.join()
 
 def get_queue():
     cq_list = session.query(CollectionQueue).filter(CollectionQueue.is_collected == 0).filter(CollectionQueue.goods_id == 0) \
@@ -101,38 +111,23 @@ def get_url(url_dic):
         name = soup.find("div",{"class":"product-titles"}).find("h1",{"class":"product-titles__name product-titles__name--long u-margin-b--none u-margin-t--lg"}).text.strip()
         print name
         material = soup.find("div", {"class": "product-details__content"}) \
-            .find("ul", {"class": "product-details__list u-margin-l--none"}).findAll("li")[0].text.split()
-        # js-tabs__content js-tabs__content-active product-details__description
-        # print material
-        # print material
-        count = []
-        for index1, p in enumerate(material):
-            # print index1
-            for index2, q in enumerate(p):
-                if q == '%':
-                    count.append(index1)
-                    # print count
-        if len(count) == 0:
-            if "blend" in material:
-                material = material[0]
-            material == material
+            .find("ul", {"class": "product-details__list u-margin-l--none"}).findAll("li")[0].text.lower()
+        print material
+        if '%' in material:
+            # material = re.findall('\s+([a-z]+)\s*', material.lower())[0]
+            material = re.findall('%\s+([a-z]+)\s*', material)[0]
             print material
-        else:
-            material = material[count[0] + 1]
-            material1 = []
-            i = 0
-            for index, p in enumerate(material):
-                i = i + 1
-                material1.append(p)
-                # material= "".join(material1)
-                if "L" in material1:
-                    material1 = material1[0:i - 1]
-                    material = "".join(material1)
-                    print material
-                if "C" in material1:
-                    material1 = material1[0:i - 1]
-                    material = "".join(material1).lower()
-                    # print material
+            if 'lining' in material:
+                material = material.split('lining')[0]
+                print material
+            if 'contrast' in material:
+                material = material.split('contrast')[0]
+                print material
+        if '/' in material:
+            material = material.split('/', 1)[0]
+            print material
+        if 'blend' in material:
+            material = material.split(' ', 1)[0]
             print material
 
         color = get_color(color.lower())
@@ -293,7 +288,8 @@ def get_material(material_str):
     return ''
 
 if __name__== '__main__':
-    get_queue()
-    for i in url_list:
-        get_url(i)
+    # get_queue()
+    # for i in url_list:
+    #     get_url(i)
+    do_poll()
 
